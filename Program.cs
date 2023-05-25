@@ -34,12 +34,19 @@ void PrintAllRestaurantThatHaveSchnitzel(string[] menus)
 
 void PrintSpecifiedDish(string[] menus, string searchedDish, string parameter)
 {
-    Console.WriteLine($"WHERE TO GET {parameter} {searchedDish.ToUpper()}?");
-    Console.WriteLine($"=========================================");
+    string welcome = $"WHERE TO GET {parameter} {searchedDish.ToUpper()}?";
     Console.WriteLine();
+    Console.WriteLine(welcome);
+    foreach (char ch in welcome)
+    {
+        Console.Write('=');
+    }
+    Console.WriteLine("\n");
 
     int count = 0, currentPrice = 0, endPrice = 0;
     string restaurant = "";
+    bool condition = false;
+
     for (int i = 0; i < menus.Length; i++)
     {
         string[] lines = File.ReadAllLines(menus[i]);
@@ -65,19 +72,17 @@ void PrintSpecifiedDish(string[] menus, string searchedDish, string parameter)
 
                 if (parameter == "THE CHEAPEST")
                 {
-                    if (currentPrice < endPrice)
-                    {
-                        endPrice = currentPrice;
-                        restaurant = Path.GetFileNameWithoutExtension(menus[i]);
-                    }
+                    condition = currentPrice < endPrice;
                 }
                 else if (parameter == "THE MOST EXPENSIVE")
                 {
-                    if (currentPrice > endPrice)
-                    {
-                        endPrice = currentPrice;
-                        restaurant = Path.GetFileNameWithoutExtension(menus[i]);
-                    }
+                    condition = currentPrice > endPrice;
+                }
+                
+                if (condition)
+                {
+                    endPrice = currentPrice;
+                    restaurant = Path.GetFileNameWithoutExtension(menus[i]);
                 }
                 count++;
             }
